@@ -1,0 +1,18 @@
+body {
+	background-color: teal;
+}
+#ulWrapper {
+	width: 100%;
+	overflow: hidden;
+	border: 1px; solid black;
+}
+ul {
+	float: left;
+	padding: 5px;
+	background-color: whitesmoke;
+	margin: 1px;
+	overflow: hidden;
+}
+tr {
+	float: left;
+}
