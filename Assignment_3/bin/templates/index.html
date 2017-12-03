@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Main page</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="http://localhost:8080/css/style.css"/>
+    </head>
+	<body>
+		<h1>Assignment 3 main page</h1>
+		<form action="/" method="get">
+			<input type="text" name="query" value=""></input>
+			<input type="submit" value="Search"></input>
+		</form>
+		<h3 th:if="${query != null}" th:text="'Search results for: ' + ${query}"></h3>
+	</body>
+</html>
