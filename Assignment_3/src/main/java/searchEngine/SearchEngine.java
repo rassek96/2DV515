@@ -30,7 +30,6 @@ public class SearchEngine {
 		normalizeScores(location, true);
 		
 		for(int i = 0; i < db.getPages().size(); i++) {
-			System.out.println(content[i] + " ::::: " + location[i]);
 			Page p = db.getPages().get(i);
 			double score = 1.0 * content[i] + 0.5 * location[i];
 			result.add(new SearchResult(p, score));
@@ -38,11 +37,6 @@ public class SearchEngine {
 		
 		Collections.sort(result);
 		Collections.reverse(result);
-		
-		System.out.println("Result for search '" + query + "':");
-		for(int i = 0; i < 5; i++) {
-			System.out.println(result.get(i).toString());
-		}
 		
 		return result;
 	}

@@ -1,5 +1,6 @@
 package hello;
 
+import java.util.ArrayList;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,7 @@ import model.PageDB;
 import model.WikiData;
 import searchEngine.ContentBasedRank;
 import searchEngine.SearchEngine;
+import searchEngine.SearchResult;
 
 @Controller
 public class MainPageController {
@@ -32,11 +34,13 @@ public class MainPageController {
 	
     @RequestMapping(value = "/", params={"query"}, method = RequestMethod.GET)
     public String search(@RequestParam(value = "query", required = true) String query, Model model) {
-    	System.out.println(query);
     	model.addAttribute("query", query);
-    	System.out.println("----------------------------------");
-    	searchEngine.query(query);
-    	System.out.println("----------------------------------");
+    	ArrayList<SearchResult> result = searchEngine.query(query);
+		ArrayList<SearchResult> resultLimit = new ArrayList<>();
+		for(int i = 0; i < 10; i++) {
+			resultLimit.add(result.get(i));
+		}
+    	model.addAttribute("results", resultLimit);
     	return "index";
     }
 }

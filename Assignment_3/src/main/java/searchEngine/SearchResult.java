@@ -3,10 +3,14 @@ package searchEngine;
 public class SearchResult implements Comparable<SearchResult> {
 	private Page page;
 	private double score;
+	public String url; 
+	public double getScore;
 
 	public SearchResult(Page p, double score) {
 		this.page = p;
 		this.score = score;
+		this.getScore = (double) Math.round(score * 100) / 100;
+		this.url = this.page.getURL();
 	}
 	
 	public double getScore() {
@@ -15,7 +19,6 @@ public class SearchResult implements Comparable<SearchResult> {
 
 	@Override
 	public int compareTo(SearchResult o) {
-		//return (int) Math.ceil(this.getScore() - o.getScore());
 		if(this.score > o.getScore()) {
 			return 1;
 		}

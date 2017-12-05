@@ -11,6 +11,14 @@
 			<input type="text" name="query" value=""></input>
 			<input type="submit" value="Search"></input>
 		</form>
-		<h3 th:if="${query != null}" th:text="'Search results for: ' + ${query}"></h3>
+		<div id="content">
+			<h3 th:if="${query != null}" th:text="'Search results for: ' + ${query}"></h3>
+			<table>
+    			<tr th:each="result : ${results}">
+        				<span th:text="${result.getScore} + ' - '"></span><a th:href="@{https://en.wikipedia.org}+${result.url}" th:text="${result.url}"></a>
+        				<br/>
+    			</tr>
+			</table>
+		</div>
 	</body>
 </html>

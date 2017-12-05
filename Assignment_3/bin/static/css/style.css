@@ -16,3 +16,11 @@ ul {
 tr {
 	float: left;
 }
+#content {
+	margin-top: 4px;
+	background-color: whitesmoke;
+	padding: 4px;
+}
+span {
+	margin-right: 5px;
+}
