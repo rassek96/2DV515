@@ -15,7 +15,7 @@ public class ContentBasedRank {
 	}
 	
 	public double getCountFrequencyScore(Page page, String query) {
-		int score = 0;
+		double score = 0.0;
 		ArrayList<String> queryWords = new ArrayList<>();
 		String[] words = query.split(" ");
 		queryWords.addAll(Arrays.asList(words));
@@ -30,20 +30,24 @@ public class ContentBasedRank {
 		return score;
 	}
 	public double getCountLocationScore(Page page, String query) {
-		int score = 0;
+		double score = 0.0;
 		ArrayList<String> queryWords = new ArrayList<>();
 		String[] words = query.split(" ");
 		queryWords.addAll(Arrays.asList(words));
 		for(String word : queryWords) {
 			int idForWord = db.getIdForWord(word);
-			for(int id : page.getWords()) {
-				if(idForWord == id) {
-					score += page.getWords().indexOf(id);
+			boolean isFound = false;
+			for(int i = 0; i < page.getWords().size(); i++) {
+				if(idForWord == page.getWords().get(i)) {
+					score += i;
+					isFound = true;
+					break;
 				}
 			}
-			score += 100000;
+			if(!isFound) {
+				score += 1000000;
+			}
 		}
-		
 		return score;
 	}
 	public double getWordDistanceScore(Page page, String query) {

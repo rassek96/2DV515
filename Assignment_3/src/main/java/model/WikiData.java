@@ -24,7 +24,7 @@ public class WikiData {
 			for(File child : dirList) {
 				//If it's a directory go into it
 				if(child.exists() && child.isDirectory()) {
-					populateDB(filePath += "/" + child.getName());
+					populateDB(filePath + "/" + child.getName());
 				} 
 				//If it's a file generate Page object
 				else if(child.exists() && child.isFile()) {
@@ -49,7 +49,6 @@ public class WikiData {
 			while((line = wReader.readLine()) != null) {
 				String[] wlist = line.split(" ");
 				for(String w : wlist) {
-					//System.out.println(8);
 					int id = db.getIdForWord(w);
 					words.add(id);
 				}

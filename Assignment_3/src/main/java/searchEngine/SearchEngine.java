@@ -20,19 +20,21 @@ public class SearchEngine {
 		
 		double[] content = new double[db.getPages().size()];
 		double[] location = new double[db.getPages().size()];
+		double[] pageRank = new double[db.getPages().size()];
 		for(int i = 0; i < db.getPages().size(); i++) {
 			Page page = db.getPages().get(i);
 			content[i] = cbs.getCountFrequencyScore(page, query);
 			location[i] = cbs.getCountLocationScore(page, query);
+			pageRank[i] = page.pageRank;
 		}
-		
-		normalizeScores(content, false);
-		normalizeScores(location, true);
+		content = normalizeScores(content, false);
+		location = normalizeScores(location, true);
+		pageRank = normalizeScores(pageRank, false);
 		
 		for(int i = 0; i < db.getPages().size(); i++) {
 			Page p = db.getPages().get(i);
-			double score = 1.0 * content[i] + 0.5 * location[i];
-			result.add(new SearchResult(p, score));
+			double score = (1.0 * content[i]) + (1.0 * pageRank[i]) + (0.5 * location[i]);
+			result.add(new SearchResult(p, score, content[i], pageRank[i], location[i]));
 		}
 		
 		Collections.sort(result);
@@ -40,7 +42,7 @@ public class SearchEngine {
 		
 		return result;
 	}
-	private void normalizeScores(double[] scores, boolean smallIsBetter) {
+	private double[] normalizeScores(double[] scores, boolean smallIsBetter) {
 		if(smallIsBetter) {
 			double min = Double.MAX_VALUE;
 			for(double s : scores) {
@@ -51,6 +53,7 @@ public class SearchEngine {
 			for(int i = 0; i < scores.length; i++) {
 				scores[i] = min / Math.max(scores[i], 0.00001);
 			}
+			return scores;
 		}
 		else {
 			double max = Double.MIN_VALUE;
@@ -65,23 +68,7 @@ public class SearchEngine {
 			for(int i = 0; i < scores.length; i++) {
 				scores[i] = scores[i] / max;
 			}
+			return scores;
 		}
-	}
-	public void calculatePageRank(PageDB db) {
-		for(int i = 0; i < 20; i++) {
-			for(Page p : db.getPages()) {
-				iteratePageRank(p, db);
-			}
-		}
-	}
-	private void iteratePageRank(Page p, PageDB db) {
-		double pr = 0;
-		for(Page po : db.getPages()) {
-			if(po.hasLinkTo(p.getURL())) {
-				pr += po.pageRank / (double)po.linksCount();
-			}
-		}
-		pr = 0.85 * pr + 0.15;
-		p.pageRank = pr;
 	}
 }

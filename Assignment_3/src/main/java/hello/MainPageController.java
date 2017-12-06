@@ -22,9 +22,10 @@ public class MainPageController {
 	public MainPageController() {
 		wikiData = new WikiData(new PageDB());
 		db = wikiData.populateDB("src/main/resources/data/Words");
+		db.calculatePageRank();
 		ContentBasedRank cbs = new ContentBasedRank(db);
-		System.out.println(db.getPages().size());
 		searchEngine = new SearchEngine(db, cbs);
+		//"src/main/resources/data/PageIndex.txt"
 	}
     
 	@RequestMapping(value = "/", method = RequestMethod.GET)

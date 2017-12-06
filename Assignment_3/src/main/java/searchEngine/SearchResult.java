@@ -6,7 +6,7 @@ public class SearchResult implements Comparable<SearchResult> {
 	public String url; 
 	public double getScore;
 
-	public SearchResult(Page p, double score) {
+	public SearchResult(Page p, double score, double content, double pageRank, double location) {
 		this.page = p;
 		this.score = score;
 		this.getScore = (double) Math.round(score * 100) / 100;

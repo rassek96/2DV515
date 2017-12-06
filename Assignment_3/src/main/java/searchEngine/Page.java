@@ -24,6 +24,6 @@ public class Page {
 		return links.size();
 	}
 	public boolean hasLinkTo(String url) {
-		return links.contains("/wiki/" + url);
+		return links.contains(url);
 	}
 }
