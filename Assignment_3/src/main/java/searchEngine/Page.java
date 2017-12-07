@@ -26,4 +26,7 @@ public class Page {
 	public boolean hasLinkTo(String url) {
 		return links.contains(url);
 	}
+	public boolean equals(Page page) {
+		return this.getURL().equals(page.getURL());
+	}
 }

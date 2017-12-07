@@ -25,7 +25,8 @@ public class MainPageController {
 		db.calculatePageRank();
 		ContentBasedRank cbs = new ContentBasedRank(db);
 		searchEngine = new SearchEngine(db, cbs);
-		//"src/main/resources/data/PageIndex.txt"
+		//Save new page index file
+		db.savePageIndex("src/main/resources/data/PageIndex.txt");
 	}
     
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -38,7 +39,7 @@ public class MainPageController {
     	model.addAttribute("query", query);
     	ArrayList<SearchResult> result = searchEngine.query(query);
 		ArrayList<SearchResult> resultLimit = new ArrayList<>();
-		for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < 25; i++) {
 			resultLimit.add(result.get(i));
 		}
     	model.addAttribute("results", resultLimit);

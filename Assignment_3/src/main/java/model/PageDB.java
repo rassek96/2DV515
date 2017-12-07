@@ -1,6 +1,7 @@
 package model;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.PrintWriter;
@@ -17,6 +18,10 @@ public class PageDB {
 	
 	public PageDB() {
 		wordToId = new LinkedHashMap<String, Integer>();
+		//If page index file exists, load it 
+		if(new File("src/main/resources/data/PageIndex.txt").exists()) {
+			loadPageIndex("src/main/resources/data/PageIndex.txt");
+		}
 		pages = new ArrayList<Page>();
 	}
 	
@@ -29,7 +34,7 @@ public class PageDB {
 	public void addPage(Page page) {
 		//Do not allow duplicates
 		for(Page p : pages) {
-			if(p.getURL().equals(page.getURL())) {
+			if(p.equals(page)) {
 				return;
 			}
 		}

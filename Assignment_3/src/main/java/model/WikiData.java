@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 
-import groovyjarjarantlr.StringUtils;
 import searchEngine.Page;
 
 public class WikiData {
