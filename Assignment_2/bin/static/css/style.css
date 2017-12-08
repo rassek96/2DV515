@@ -16,3 +16,8 @@ ul {
 tr {
 	float: left;
 }
+
+#content {
+	background-color: whitesmoke;
+
+}

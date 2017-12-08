@@ -1,0 +1,26 @@
+body {
+	background-color: teal;
+}
+ul {
+    margin: 2px; 
+    padding: 2px;
+    cursor: pointer;
+    border-bottom: 1px solid darkgray;
+}
+li {
+    border-left:1px solid lightgray;
+    margin: 2px;
+    padding: 2px;
+}
+#content {
+	background-color: whitesmoke;
+	overflow: auto;
+	padding: 5px;
+}
+.toggle {
+	cursor: pointer;
+}
+.toggle:hover {
+	cursor: pointer;
+	background-color: lightgray;
+}

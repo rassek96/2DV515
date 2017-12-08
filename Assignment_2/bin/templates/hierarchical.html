@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Main page</title>
+        <link rel="stylesheet" type="text/css" href="http://localhost:8080/css/hierarchical.css"/>
+        <script src="http://localhost:8080/js/collapse.js"></script>
+    </head>
+	<body>
+		<div id="content">
+			<h1>Hierarchical page</h1>
+			<a href="/">Back to main page</a>
+			<div th:utext="${htmlBody}"></div>
+		</div>		
+	</body>
+</html>

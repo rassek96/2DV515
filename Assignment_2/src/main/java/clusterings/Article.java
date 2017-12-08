@@ -13,7 +13,6 @@ public class Article {
 		wordsCount = aWordsCount;
 		words = aWords;
 	}
-	
 	public String getName() {
 		return name;
 	}
@@ -22,6 +21,9 @@ public class Article {
 	}
 	public ArrayList<Word> getWords() {
 		return words;
+	}
+	public void addWord(Word word) {
+		words.add(word);
 	}
 	
 	public double calc_Pearson(ArrayList<Double> aB) {
@@ -41,6 +43,34 @@ public class Article {
 		int n = Math.min(getWords().size(), aB.size());
 		for(int i = 0; i < n; i++) {
 			pSum += getWords().get(i).count * aB.get(i);
+		}
+		//Algorithm for pearson
+		double num = pSum - (sumA*sumB / n);
+		double den = Math.sqrt((sumAsq - Math.pow(sumA, 2) / n) * (sumBsq - Math.pow(sumB, 2) / n));
+		
+		if(den == 0) {
+			return 0;
+		}
+		return 1.0 - num / den;
+	}
+	
+	public double calc_Pearson(Article aB) {
+		double sumA = 0;
+		double sumAsq = 0;
+		for(Word w : getWords()) {
+			sumA += w.count;
+			sumAsq += Math.pow(w.count, 2);
+		}
+		double sumB = 0;
+		double sumBsq = 0;
+		for(Word w : aB.getWords()) {
+			sumB += w.count;
+			sumBsq += Math.pow(w.count, 2);
+		}
+		double pSum = 0;
+		int n = Math.min(getWords().size(), aB.getWords().size());
+		for(int i = 0; i < n; i++) {
+			pSum += getWords().get(i).count * aB.getWords().get(i).count;
 		}
 		//Algorithm for pearson
 		double num = pSum - (sumA*sumB / n);
