@@ -14,14 +14,16 @@ public class KMeansAlgorithm {
 	public ArrayList<Centroid> kmeans(int k, BlogData blogData) {
 		ArrayList<Article> articles = blogData.getArticles();
 		ArrayList<Centroid> centroids = new ArrayList<>();
+		int wCnt = articles.get(0).getWords().size();
 		Random rnd = new Random();
 		//Get words highest count
 		ArrayList<Integer> highestWordCount = new ArrayList<>();
-		for(int i = 0; i < articles.get(0).getWords().size(); i++) {
+		for(int i = 1; i < wCnt; i++) {
 			int highest = 0;
 			for(Article a : articles) {
 				if(highest < (int)a.getWords().get(i).count) {
 					highest = (int)a.getWords().get(i).count;
+					
 				}
 			}
 			highestWordCount.add(highest);
@@ -29,7 +31,7 @@ public class KMeansAlgorithm {
 		//Add k number of centroids at random places
 		for(int i = 0; i < k; i++) {
 			ArrayList<Double> centroidWords = new ArrayList<Double>();
-			for(int i2 = 0; i2 < articles.get(0).getWords().size(); i2++) {
+			for(int i2 = 1; i2 < wCnt; i2++) {
 				if(i < highestWordCount.size()) {
 					double rndCentr;
 					rndCentr = rnd.nextInt(highestWordCount.get(i));

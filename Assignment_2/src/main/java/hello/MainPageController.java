@@ -13,10 +13,12 @@ import model.BlogData;
 
 @Controller
 public class MainPageController {
-	BlogData blogData;
+	private BlogData blogData;
+	private BlogData wikiData;
 	
 	public MainPageController() {
 		this.blogData = new BlogData("src/main/resources/blogdata.txt");
+		this.wikiData = new BlogData("src/main/resources/wikidata.txt");
 	}
     
     @RequestMapping(value = "/")
@@ -27,7 +29,7 @@ public class MainPageController {
     @RequestMapping(value = "/k-means/centroids")
     public String centroids(Model model) {
     	KMeansAlgorithm kmeans = new KMeansAlgorithm();
-    	ArrayList<Centroid> centroids = kmeans.kmeans(5, blogData);
+    	ArrayList<Centroid> centroids = kmeans.kmeans(3, blogData);
     	model.addAttribute("centroids", centroids);
     	return "centroids";
     }
@@ -35,6 +37,24 @@ public class MainPageController {
     @RequestMapping(value = "/hierarchical")
     public String hierarchical(Model model) {
     	HierarchicalAlgorithm hierarchical = new HierarchicalAlgorithm(blogData);
+    	ArrayList<Cluster> clusters = hierarchical.getClusters();
+    	Cluster root = clusters.get(0);
+    	String tree = buildTree(root);
+    	model.addAttribute("htmlBody", tree);
+    	return "hierarchical";
+    }
+    
+    @RequestMapping(value = "wiki/k-means/centroids")
+    public String wikiCentroids(Model model) {
+    	KMeansAlgorithm kmeans = new KMeansAlgorithm();
+    	ArrayList<Centroid> centroids = kmeans.kmeans(3, wikiData);
+    	model.addAttribute("centroids", centroids);
+    	return "centroids";
+    }
+    
+    @RequestMapping(value = "wiki/hierarchical")
+    public String wikiHierarchical(Model model) {
+    	HierarchicalAlgorithm hierarchical = new HierarchicalAlgorithm(wikiData);
     	ArrayList<Cluster> clusters = hierarchical.getClusters();
     	Cluster root = clusters.get(0);
     	String tree = buildTree(root);

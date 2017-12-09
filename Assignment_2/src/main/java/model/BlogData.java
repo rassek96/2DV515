@@ -1,9 +1,15 @@
 package model;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import clusterings.Article;
 import clusterings.Word;
@@ -14,7 +20,7 @@ public class BlogData {
 	private String contents;
 	
 	public BlogData(String filePath) {
-		contents = getContent(filePath);
+		this.contents = this.getContent(filePath);
 	}
 	
 	public ArrayList<Article> getArticles() {
@@ -72,9 +78,90 @@ public class BlogData {
 				counter++;
 			}
 			reader.close();
-		} catch (Exception e) {
+		} catch (FileNotFoundException e) {
+			//If file is not found, generate wiki data and try again
+			this.generateWikiData("src/main/resources/data/Words");
+			getContent(filePath);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return content;
+	}
+	
+	//Generate Wiki data
+	private ArrayList<String> lines = new ArrayList<>();
+	private String[] artWords = {"WikiArticle", "Language", "Programming", "Computer", "Software", "Hardware", "Data", "Player", "Online", "System", "Development", "Machine", "Console", "Developer", "Design", "History", "Technology", "Standard", "Information", "Article", "Example", "Game", "Programming", "Action", "Company", "Latest", "Version", "Released", "Character", "Main", "Line", "Code", "Series"};
+	public void generateWikiData(String filePath) {
+		String artWordline = "";
+		for(String s : artWords) {
+			if(!artWordline.equals("")) {
+				artWordline += "\t";
+			}
+			artWordline += s;
+		}
+		lines.add(artWordline);
+		this.getWiki(filePath);
+		this.printWiki();
+		System.out.println("Done!");
+	}
+	private void getWiki(String filePath) {
+		//Get all directories in filepath (wiki data directory)
+		File dir = new File(filePath);
+		File[] dirList = dir.listFiles();
+		if(dirList != null) {
+			//For every file or directory
+			for(File child : dirList) {
+				//If it's a directory go into it
+				if(child.exists() && child.isDirectory()) {
+					this.getWiki(filePath + "/" + child.getName());
+				} 
+				//If it's a file count words for that article
+				else if(child.exists() && child.isFile()) {
+					this.convertFile(child, filePath);
+				}
+			}
+		}
+	}
+	private void convertFile(File child, String filePath) {
+		//Count words in Wiki files and stringify it  
+		String name = child.getName();
+		LinkedHashMap<String, Integer> articleWords = new LinkedHashMap<>();
+		File file = new File(filePath + "/" + child.getName());
+		try (LineNumberReader reader = new LineNumberReader(new FileReader(file))) {
+			String line;
+			while((line = reader.readLine()) != null) {
+				for(String wordName : artWords) {
+					int count = 0;
+					articleWords.put(wordName, count);
+					for(String el : line.split(" ")) {
+						if(el.equalsIgnoreCase(wordName)) {
+							count++;
+							articleWords.put(wordName, count);
+						}
+					}
+				}
+			}
+			
+			//Add to datalines file
+			line = "";
+			for(Integer wCount : articleWords.values()) {
+				line += "\t" + wCount;
+			}
+			lines.add(name + line);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	private void printWiki() {
+		//Save wikiarticle data to file
+		try(PrintWriter writer = new PrintWriter("src/main/resources/wikidata.txt")) {
+			for(String line : lines) {
+				writer.println(line);
+			}
+		} 
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 }
