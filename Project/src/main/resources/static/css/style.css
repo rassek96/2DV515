@@ -1,0 +1,8 @@
+body {
+	background-color: teal;
+}
+#content {
+	margin-top: 4px;
+	background-color: whitesmoke;
+	padding: 4px;
+}
