@@ -5,4 +5,15 @@ body {
 	margin-top: 4px;
 	background-color: whitesmoke;
 	padding: 4px;
+	font-size: 18px;
+}
+span {
+	position: relative;
+	border-bottom: lightgray solid 1px;
+	border-left: lightgray solid 1px;
+	cursor: default;
+	padding: 2px;
+}
+span:hover {
+	background-color: lightgray;
 }

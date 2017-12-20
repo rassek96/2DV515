@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Map;
 
 import recSystem.Movie;
 import recSystem.User;
@@ -17,13 +19,14 @@ public class Data {
 		this.db = db;
 		readMovies();
 		readUsers();
+		
+		generateItemBased();
 	}
 	
 	private void readMovies() {
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(filePath+"movies.csv"));
 			String line = reader.readLine();
-			System.out.println(line);
 			while((line = reader.readLine()) != null) {
 				//Split line to attributes
 				String[] attributes = line.split(",");
@@ -36,7 +39,6 @@ public class Data {
 				Movie movie = new Movie(id, title, genres);
 				db.movies.put(id, movie);
 			}
-			System.out.println(db.movies.size());
 			
 			reader.close();
 		}
@@ -48,7 +50,6 @@ public class Data {
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(filePath+"ratings.csv"));
 			String line = reader.readLine();
-			System.out.println(line);
 			while((line = reader.readLine()) != null) {
 				//Split line to attributes
 				String[] attributes = line.split(",");
@@ -67,11 +68,27 @@ public class Data {
 				}
 				user.addRating(movieId, rating);
 			}
-			System.out.println(db.users.size());
 			reader.close();
 		}
 		catch(Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private void generateItemBased() {
+		Iterator<User> it = db.users.values().iterator();
+		while(it.hasNext()) {
+			User user = it.next();
+			for(Map.Entry<Integer, Double> rating : user.getRatings().entrySet()) {
+				Integer movieId = rating.getKey();
+				Movie movie = db.movies.get(movieId);
+				double score = rating.getValue();
+				if(!db.moviesItemBased.containsKey(movieId)) {
+					db.moviesItemBased.put(movieId, movie);
+				}
+				Movie nMovie = db.moviesItemBased.get(movieId);
+				nMovie.addRating(user.getId(), score);
+			}
 		}
 	}
 }
